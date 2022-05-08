@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+
+  grow-a-tree:
+    container_name: grow-a-tree
+    image: grow-a-tree:latest
+    ports:
+      - "8080:8080"
+    restart: unless-stopped

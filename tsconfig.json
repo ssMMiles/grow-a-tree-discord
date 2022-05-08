@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "strict": true,
+
+    "lib": ["es2021"],
+    "target": "es2022",
+
+    "module": "commonjs",
+    "moduleResolution": "node",
+
+    "outDir": "./dist",
+    "declaration": true,
+    "sourceMap": true
+  },
+  "include": ["src", "tests"],
+  "exclude": ["node_modules", "dist"]
+}
