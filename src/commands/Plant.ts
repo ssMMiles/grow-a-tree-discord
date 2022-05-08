@@ -15,7 +15,8 @@ export class Plant implements ISlashCommand {
   );
 
   public handler = async (ctx: SlashCommandContext): Promise<void> => {
-    if (!ctx.interaction.guild_id) ctx.reply(SimpleError("Guild ID missing."));
+    if (ctx.game) return ctx.reply(`A tree called \`\`${ctx.game.name}\`\` has already been planted.`);
+    if (!ctx.interaction.guild_id) return ctx.reply(SimpleError("Guild ID missing."));
 
     const name = ctx.options.get("name");
     if (!name) return ctx.reply(SimpleError("Name not found."));

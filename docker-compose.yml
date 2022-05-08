@@ -2,9 +2,15 @@ version: '3'
 
 services:
 
+  mongo:
+    image: mongo
+
+  redis:
+    image: redis
+
   grow-a-tree:
     container_name: grow-a-tree
     image: grow-a-tree:latest
     ports:
-      - "8080:8080"
+      - "8089:8080"
     restart: unless-stopped

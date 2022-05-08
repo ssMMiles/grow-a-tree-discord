@@ -23,9 +23,11 @@ import { Guild, IGuild } from "./models/Guild";
 declare module "interactions.ts" {
   interface BaseInteractionContext {
     game: HydratedDocument<IGuild> | undefined;
+    timeouts: Map<string, NodeJS.Timeout>;
   }
 }
 
+const timeouts = new Map();
 const keys = ["CLIENT_ID", "TOKEN", "PUBLIC_KEY", "PORT"];
 
 if (keys.some((key) => !(key in process.env))) {
@@ -34,7 +36,9 @@ if (keys.some((key) => !(key in process.env))) {
 }
 
 (async () => {
-  const redisClient = createClient();
+  const redisClient = createClient({
+    url: "redis://redis"
+  });
 
   await redisClient.connect();
 
@@ -72,6 +76,7 @@ if (keys.some((key) => !(key in process.env))) {
         }
 
         ctx.decorate("game", game);
+        ctx.decorate("timeouts", timeouts);
       }
     }
   });
@@ -127,10 +132,7 @@ if (keys.some((key) => !(key in process.env))) {
     }
   });
 
-  const user = "test",
-    password = "test";
-
-  connect(`mongodb://${user}:${password}@localhost/trees?authSource=admin`)
+  connect(`mongodb://mongo/trees`)
     .then(async () => {
       const address = "0.0.0.0";
       const port = process.env.PORT as string;

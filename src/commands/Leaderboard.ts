@@ -42,7 +42,7 @@ async function buildLeaderboardMessage(ctx: SlashCommandContext | ButtonContext)
 
     const contributor = contributors[i];
 
-    description += `${i < 3 ? `**${i + 1}**` : `${i + 1}`}. #${contributor.count} <@${contributor.userId}>\n`;
+    description += `${i < 3 ? `**${i + 1}**` : `${i + 1}`}. 💧${contributor.count} <@${contributor.userId}>\n`;
   }
 
   return new MessageBuilder()

@@ -32,14 +32,14 @@ export class Forest implements ISlashCommand {
 async function buildLeaderboardMessage(ctx: SlashCommandContext | ButtonContext): Promise<MessageBuilder> {
   let description = "";
 
-  const contributors = await Guild.find().sort({ size: -1 }).limit(10);
+  const trees = await Guild.find().sort({ size: -1 }).limit(10);
 
   for (let i = 0; i < 10; i++) {
-    if (i === contributors.length) break;
+    if (i === trees.length) break;
 
-    const contributor = contributors[i];
+    const tree = trees[i];
 
-    description += `${i < 3 ? `**${i + 1}**` : `${i + 1}`}. ${contributor.size}ft \`\`${contributor.name}\`\`>\n`;
+    description += `${i < 3 ? `**${i + 1}**` : `${i + 1}`}. \`\`${tree.name}\`\` - ${tree.size}ft\n`;
   }
 
   return new MessageBuilder()
