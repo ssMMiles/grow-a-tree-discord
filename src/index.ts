@@ -15,14 +15,12 @@ import {
 } from "interactions.ts";
 import { connect, HydratedDocument } from "mongoose";
 import { createClient } from "redis";
-import { Leaderboard, Ping, Tree } from "./commands";
-import { Forest } from "./commands/Forest";
-import { Plant } from "./commands/Plant";
+import { About, Forest, Leaderboard, Ping, Plant, Profile, Tree } from "./commands";
 import { Guild, IGuild } from "./models/Guild";
 
 declare module "interactions.ts" {
   interface BaseInteractionContext {
-    game: HydratedDocument<IGuild> | undefined;
+    game: HydratedDocument<IGuild> | null;
     timeouts: Map<string, NodeJS.Timeout>;
   }
 }
@@ -81,7 +79,10 @@ if (keys.some((key) => !(key in process.env))) {
     }
   });
 
-  app.commands.register([new Ping(), new Plant(), new Tree(), new Leaderboard(), new Forest()], true);
+  app.commands.register(
+    [new Ping(), new Plant(), new Tree(), new Leaderboard(), new Forest(), new Profile(), new About()],
+    false
+  );
 
   const server = fastify();
   server.register(rawBody);

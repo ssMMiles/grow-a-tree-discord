@@ -12,11 +12,15 @@ import {
 } from "interactions.ts";
 import { getWateringInterval } from "../util/watering-inteval";
 
+const builder = new SlashCommandBuilder("tree", "Display your server's tree.");
+
+builder.setDMEnabled(false);
+
 export class Tree implements ISlashCommand {
-  public builder = new SlashCommandBuilder("tree", "Display your server's tree.");
+  public builder = builder;
 
   public handler = async (ctx: SlashCommandContext): Promise<void> => {
-    if (!ctx.game) return ctx.reply("Use /plant to plant a tree for your server first.");
+    if (ctx.game === null) return ctx.reply("Use /plant to plant a tree for your server first.");
 
     return ctx.reply(await buildTreeDisplayMessage(ctx));
   };
