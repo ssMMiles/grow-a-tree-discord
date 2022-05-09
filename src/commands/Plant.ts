@@ -8,23 +8,50 @@ import {
   SlashCommandStringOption
 } from "interactions.ts";
 import { Guild } from "../models/Guild";
+import { validateTreeName } from "../util/validate-tree-name";
+
+const builder = new SlashCommandBuilder("plant", "Plant a tree for your server.").addStringOption(
+  new SlashCommandStringOption("name", "A name for your server's tree.").setRequired(true)
+);
+
+builder.setDMEnabled(false);
 
 export class Plant implements ISlashCommand {
-  public builder = new SlashCommandBuilder("plant", "Plant a tree for your server.").addStringOption(
-    new SlashCommandStringOption("name", "A name for your server's tree.").setRequired(true)
-  );
+  public builder = builder;
 
   public handler = async (ctx: SlashCommandContext): Promise<void> => {
-    if (ctx.game) return ctx.reply(`A tree called \`\`${ctx.game.name}\`\` has already been planted.`);
-    if (!ctx.interaction.guild_id) return ctx.reply(SimpleError("Guild ID missing."));
+    if (ctx.game !== null)
+      return ctx.reply(`A tree has already been planted in this server called \`\`${ctx.game.name}\`\`.`);
+    if (ctx.interaction.guild_id === undefined) return ctx.reply(SimpleError("Guild ID missing."));
 
-    const name = ctx.options.get("name");
-    if (!name) return ctx.reply(SimpleError("Name not found."));
+    const name = ctx.options.get("name")?.value as string | undefined;
+    if (name === undefined) return ctx.reply(SimpleError("Name not found."));
 
-    new Guild({ id: ctx.interaction.guild_id, name: name.value }).save();
+    if (!validateTreeName(name))
+      return ctx.reply(
+        SimpleError(
+          "Your tree name must be 1-36 characters, and contain only alphanumeric characters, hyphens, and apostrophes."
+        )
+      );
+
+    await new Guild({
+      id: ctx.interaction.guild_id,
+
+      name: name,
+
+      lastWateredAt: Math.floor(Date.now() / 1000),
+      lastWateredBy: ctx.user.id,
+
+      contributors: [
+        {
+          userId: ctx.user.id,
+          count: 1
+        }
+      ]
+    }).save();
 
     return ctx.reply(
-      new MessageBuilder().addEmbed(new EmbedBuilder().setTitle(`You planted \`\`${name.value}\`\` in your server!`))
+      new MessageBuilder().addEmbed(new EmbedBuilder().setTitle(`You planted \`\`${name}\`\` in your server!`))
     );
   };
 
