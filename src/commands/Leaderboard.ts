@@ -12,14 +12,6 @@ import {
   SlashCommandIntegerOption
 } from "interactions.ts";
 
-const builder = new SlashCommandBuilder(
-  "leaderboard",
-  "See a leaderboard of contributors to this server's tree."
-).addIntegerOption(
-  new SlashCommandIntegerOption("page", "Leaderboard page to display.").setMinValue(1).setMaxValue(10)
-);
-builder.setDMEnabled(false);
-
 type LeaderboardButtonState = {
   page: number;
 };
@@ -27,7 +19,11 @@ type LeaderboardButtonState = {
 const MEDAL_EMOJIS = ["🥇", "🥈", "🥉"];
 
 export class Leaderboard implements ISlashCommand {
-  public builder = builder;
+  public builder = new SlashCommandBuilder("leaderboard", "See a leaderboard of contributors to this server's tree.")
+    .addIntegerOption(
+      new SlashCommandIntegerOption("page", "Leaderboard page to display.").setMinValue(1).setMaxValue(10)
+    )
+    .setDMEnabled(false);
 
   public handler = async (ctx: SlashCommandContext): Promise<void> => {
     if (ctx.game === null) return ctx.reply("Use /plant to plant a tree for your server first.");

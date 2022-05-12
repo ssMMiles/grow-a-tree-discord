@@ -121,6 +121,11 @@
   resolved "https://registry.yarnpkg.com/@sapphire/snowflake/-/snowflake-3.2.1.tgz#027f217779ec7fd324d35cf941b3de49b4f67877"
   integrity sha512-vmZq1I6J6iNRQVXP+N9HzOMOY4ORB3MunoFeWCw/aBnZTf1cDgDvP0RZFQS53B1TN95AIgFY9T+ItQ/fWAUYWQ==
 
+"@types/humanize-duration@^3.27.1":
+  version "3.27.1"
+  resolved "https://registry.yarnpkg.com/@types/humanize-duration/-/humanize-duration-3.27.1.tgz#f14740d1f585a0a8e3f46359b62fda8b0eaa31e7"
+  integrity sha512-K3e+NZlpCKd6Bd/EIdqjFJRFHbrq5TzPPLwREk5Iv/YoIjQrs6ljdAUCo+Lb2xFlGNOjGSE0dqsVD19cZL137w==
+
 "@types/json-schema@^7.0.9":
   version "7.0.11"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
@@ -475,11 +480,6 @@ doctrine@^3.0.0:
   integrity sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
   dependencies:
     esutils "^2.0.2"
-
-dotenv@^13.0.0:
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-13.0.1.tgz#cf43980abe07accfa5c3ee321fc7ddc551975e96"
-  integrity sha512-u3KAkK+VHk01+D7V6SFtSJl2JScX1Yi4anKsKXS4oT8s8LnL5xgJe7XFAZ1bSsOfAmxU54OwOuhaLv3v70oXgw==
 
 dotenv@^16.0.0:
   version "16.0.0"
@@ -844,6 +844,11 @@ http-errors@2.0.0:
     statuses "2.0.1"
     toidentifier "1.0.1"
 
+humanize-duration@^3.27.1:
+  version "3.27.1"
+  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.27.1.tgz#2cd4ea4b03bd92184aee6d90d77a8f3d7628df69"
+  integrity sha512-jCVkMl+EaM80rrMrAPl96SGG4NRac53UyI1o/yAzebDntEY6K6/Fj2HOjdPg8omTqIe5Y0wPBai2q5xXrIbarA==
+
 iconv-lite@0.4.24:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -887,14 +892,12 @@ inherits@2, inherits@2.0.4:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
-interactions.ts@^1.0.23:
-  version "1.0.23"
-  resolved "https://registry.yarnpkg.com/interactions.ts/-/interactions.ts-1.0.23.tgz#e8af0e5c55290a1f6fc6ee3efd2400bf618f0d80"
-  integrity sha512-Bi5CV65SVxuQeklBm6aaRi8klGpeprXd40LlBpIR/ckL1zlom1o9s7lBheZ4Ld4+VTZFOJqBCV+PL0wOJOH8YQ==
+interactions.ts@^1.0.24:
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/interactions.ts/-/interactions.ts-1.0.24.tgz#3b32a7b4e2220d30a04cf259cd0f951ae6c052ad"
+  integrity sha512-O+NSqYgxxNRbA/BfbGWF0q7+7YV9j9yLFxXz0T20S2tpUu14tH7B9qQPMAyBULkT+zdc7Rlr5fc0K8OZhw3m9A==
   dependencies:
     "@discordjs/rest" "^0.3.0"
-    discord-api-types "^0.32.1"
-    dotenv "^13.0.0"
     tweetnacl "^1.0.3"
     uuid "^8.3.2"
 
@@ -1084,7 +1087,7 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-node-fetch@^2.6.5:
+node-fetch@2, node-fetch@^2.6.5:
   version "2.6.7"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==

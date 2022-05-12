@@ -16,14 +16,10 @@ type State = {
   nick: string;
 };
 
-const builder = new SlashCommandBuilder("profile", "View a user's contributions to the tree.").addUserOption(
-  new SlashCommandUserOption("target", "User whose profile you want to view.")
-);
-
-builder.setDMEnabled(false);
-
 export class Profile implements ISlashCommand {
-  public builder = builder;
+  public builder = new SlashCommandBuilder("profile", "View a user's contributions to the tree.")
+    .addUserOption(new SlashCommandUserOption("target", "User whose profile you want to view."))
+    .setDMEnabled(false);
 
   public handler = async (ctx: SlashCommandContext): Promise<void> => {
     return ctx.reply(await buildProfileMessage(ctx));

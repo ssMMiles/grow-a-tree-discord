@@ -1,3 +1,4 @@
+import humanizeDuration = require("humanize-duration");
 import {
   ActionRowBuilder,
   Button,
@@ -10,14 +11,11 @@ import {
   SlashCommandBuilder,
   SlashCommandContext
 } from "interactions.ts";
-import { getWateringInterval } from "../util/watering-inteval";
-
-const builder = new SlashCommandBuilder("tree", "Display your server's tree.");
-
-builder.setDMEnabled(false);
+import { renderTree } from "../util/image-generation";
+import { getTreeAge, getWateringInterval } from "../util/watering-inteval";
 
 export class Tree implements ISlashCommand {
-  public builder = builder;
+  public builder = new SlashCommandBuilder("tree", "Display your server's tree.").setDMEnabled(false);
 
   public handler = async (ctx: SlashCommandContext): Promise<void> => {
     if (ctx.game === null) return ctx.reply("Use /plant to plant a tree for your server first.");
@@ -43,8 +41,6 @@ export class Tree implements ISlashCommand {
           ctx.timeouts.set(
             ctx.interaction.message.id,
             setTimeout(async () => {
-              ctx.timeouts.delete(ctx.interaction?.message?.id ?? "broken");
-
               await ctx.edit(await buildTreeDisplayMessage(ctx));
             }, 3000)
           );
@@ -52,11 +48,16 @@ export class Tree implements ISlashCommand {
           return;
         }
 
-        const wateringInterval = getWateringInterval(ctx.game.size),
+        const wateringInterval = getWateringInterval(ctx.game.pieces.length),
           time = Math.floor(Date.now() / 1000);
+
         if (ctx.game.lastWateredAt + wateringInterval > time) {
-          const timeout = ctx.timeouts.get(ctx.interaction.message.id);
-          if (timeout) clearTimeout(timeout);
+          ctx.timeouts.set(
+            ctx.interaction.message.id,
+            setTimeout(async () => {
+              await ctx.edit(await buildTreeDisplayMessage(ctx));
+            }, 3000)
+          );
 
           ctx.reply(
             new MessageBuilder().addEmbed(
@@ -70,22 +71,13 @@ export class Tree implements ISlashCommand {
             )
           );
 
-          ctx.timeouts.set(
-            ctx.interaction.message.id,
-            setTimeout(async () => {
-              ctx.timeouts.delete(ctx.interaction?.message?.id ?? "broken");
-
-              await ctx.edit(await buildTreeDisplayMessage(ctx));
-            }, 3000)
-          );
-
           return;
         }
 
         ctx.game.lastWateredAt = time;
         ctx.game.lastWateredBy = ctx.user.id;
 
-        ctx.game.size++;
+        ctx.game.size = ctx.game.pieces.push(0);
 
         const contributor = ctx.game.contributors.find((contributor) => contributor.userId === ctx.user.id);
 
@@ -111,7 +103,16 @@ export class Tree implements ISlashCommand {
 }
 
 async function buildTreeDisplayMessage(ctx: SlashCommandContext | ButtonContext): Promise<MessageBuilder> {
-  if (!ctx.game) throw new Error("Game data missing.");
+  if (ctx.game === null) throw new Error("Game data missing.");
+
+  if (ctx.interaction.message) {
+    const timeout = ctx.timeouts.get(ctx.interaction.message.id);
+
+    if (timeout !== undefined) {
+      clearTimeout(timeout);
+      ctx.timeouts.delete(ctx.interaction.message.id);
+    }
+  }
 
   const message = new MessageBuilder().addComponents(
     new ActionRowBuilder().addComponents(
@@ -120,27 +121,35 @@ async function buildTreeDisplayMessage(ctx: SlashCommandContext | ButtonContext)
     )
   );
 
-  const canBeWateredAt = ctx.game.lastWateredAt + getWateringInterval(ctx.game.size);
+  const canBeWateredAt = ctx.game.lastWateredAt + getWateringInterval(ctx.game.pieces.length);
 
-  const embed = new EmbedBuilder().setTitle(ctx.game.name);
+  const time = Math.floor(Date.now() / 1000);
 
-  if (canBeWateredAt < Date.now() / 1000) {
+  const embed = new EmbedBuilder().setTitle(ctx.game.name).setFooter({
+    text: `Your tree has spent ${humanizeDuration(
+      ctx.game.lastWateredAt + getWateringInterval(ctx.game.pieces.length) < time
+        ? getTreeAge(ctx.game.pieces.length) * 1000
+        : (getTreeAge(ctx.game.pieces.length - 1) + time - ctx.game.lastWateredAt) * 1000
+    )} growing. Nice!`
+  });
+
+  embed.setImage(await renderTree(ctx.game));
+
+  if (canBeWateredAt <= time) {
     embed.setDescription(
-      `**Your tree is ${ctx.game.size}ft tall.**\n\nLast watered by: <@${ctx.game.lastWateredBy}>\n**Ready to be watered!**`
+      `**Your tree is ${ctx.game.pieces.length}ft tall.**\n\nLast watered by: <@${ctx.game.lastWateredBy}>\n**Ready to be watered!**`
     );
   } else {
     embed.setDescription(
-      `**Your tree is ${ctx.game.size}ft tall.**\n\nLast watered by: <@${ctx.game.lastWateredBy}>\n*Your tree is growing, come back <t:${canBeWateredAt}:R>.*`
+      `**Your tree is ${ctx.game.pieces.length}ft tall.**\n\nLast watered by: <@${ctx.game.lastWateredBy}>\n*Your tree is growing, come back <t:${canBeWateredAt}:R>.*`
     );
 
-    if (ctx.interaction.message && !ctx.timeouts.has(ctx.interaction.message.id)) {
+    if (ctx.interaction.message) {
       ctx.timeouts.set(
         ctx.interaction.message.id,
         setTimeout(async () => {
-          ctx.timeouts.delete(ctx.interaction?.message?.id ?? "broken");
-
           await ctx.edit(await buildTreeDisplayMessage(ctx));
-        }, canBeWateredAt * 1000 - Date.now())
+        }, (canBeWateredAt - time) * 1000)
       );
     }
   }

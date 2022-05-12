@@ -2,6 +2,14 @@ version: '3'
 
 services:
 
+  image-server:
+    image: gat-image-server:latest
+    ports: 
+      - "9090:9090"
+    volumes:
+      - /var/www/tiling-images/trees:/var/www/images
+    restart: unless-stopped
+
   mongo:
     image: mongo
 

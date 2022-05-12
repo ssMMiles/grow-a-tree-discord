@@ -83,7 +83,7 @@ async function buildLeaderboardMessage(
 
     description += `${pos < 3 ? `${MEDAL_EMOJIS[i]}` : `\`\`${pos + 1}${pos < 9 ? " " : ""}\`\``} - \`\`${
       tree.name
-    }\`\` - ${tree.size}ft\n`;
+    }\`\` - ${tree.pieces.length}ft\n`;
   }
 
   const actionRow = new ActionRowBuilder().addComponents(

@@ -7,17 +7,15 @@ import {
   SlashCommandContext,
   SlashCommandStringOption
 } from "interactions.ts";
+import CommandPermissions from "interactions.ts/dist/builders/commands/permissions/CommandPermissions";
 import { Guild } from "../models/Guild";
 import { validateTreeName } from "../util/validate-tree-name";
 
-const builder = new SlashCommandBuilder("plant", "Plant a tree for your server.").addStringOption(
-  new SlashCommandStringOption("name", "A name for your server's tree.").setRequired(true)
-);
-
-builder.setDMEnabled(false);
-
 export class Plant implements ISlashCommand {
-  public builder = builder;
+  public builder = new SlashCommandBuilder("plant", "Plant a tree for your server.")
+    .addStringOption(new SlashCommandStringOption("name", "A name for your server's tree.").setRequired(true))
+    .setDMEnabled(false)
+    .addRequiredPermissions(CommandPermissions.ADMINISTRATOR);
 
   public handler = async (ctx: SlashCommandContext): Promise<void> => {
     if (ctx.game !== null)
@@ -41,6 +39,8 @@ export class Plant implements ISlashCommand {
 
       lastWateredAt: Math.floor(Date.now() / 1000),
       lastWateredBy: ctx.user.id,
+
+      pieces: [0],
 
       contributors: [
         {

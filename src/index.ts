@@ -16,11 +16,11 @@ import {
 import { connect, HydratedDocument } from "mongoose";
 import { createClient } from "redis";
 import { About, Forest, Leaderboard, Ping, Plant, Profile, Tree } from "./commands";
-import { Guild, IGuild } from "./models/Guild";
+import { Guild, ITree } from "./models/Guild";
 
 declare module "interactions.ts" {
   interface BaseInteractionContext {
-    game: HydratedDocument<IGuild> | null;
+    game: HydratedDocument<ITree> | null;
     timeouts: Map<string, NodeJS.Timeout>;
   }
 }
@@ -79,7 +79,7 @@ if (keys.some((key) => !(key in process.env))) {
     }
   });
 
-  app.commands.register(
+  await app.commands.register(
     [new Ping(), new Plant(), new Tree(), new Leaderboard(), new Forest(), new Profile(), new About()],
     false
   );
@@ -137,6 +137,28 @@ if (keys.some((key) => !(key in process.env))) {
     .then(async () => {
       const address = "0.0.0.0";
       const port = process.env.PORT as string;
+
+      const trees = await Guild.find({});
+
+      for (const tree of trees) {
+        if (tree.pieces.length !== 0) {
+          tree.size = tree.pieces.length;
+          await tree.save();
+
+          continue;
+        }
+
+        if (!tree.size) {
+          console.error("bad tree", tree);
+          continue;
+        }
+
+        for (let i = 0; i < tree.size; i++) {
+          tree.pieces.push(0);
+        }
+
+        await tree.save();
+      }
 
       server.listen(port, address);
       console.log(`Listening for interactions on ${address}:${port}.`);
