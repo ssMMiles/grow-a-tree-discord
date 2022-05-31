@@ -15,11 +15,25 @@ import {
 } from "interactions.ts";
 import { connect, HydratedDocument } from "mongoose";
 import { createClient } from "redis";
-import { About, Forest, Leaderboard, Ping, Plant, Profile, Tree } from "./commands";
+import {
+  About,
+  Config,
+  Forest,
+  Help,
+  Leaderboard,
+  Ping,
+  Plant,
+  Profile,
+  Rename,
+  Tree,
+  UserContextProfile
+} from "./commands";
 import { Guild, ITree } from "./models/Guild";
+import { IPlayer, Player } from "./models/Player";
 
 declare module "interactions.ts" {
   interface BaseInteractionContext {
+    player: HydratedDocument<IPlayer>;
     game: HydratedDocument<ITree> | null;
     timeouts: Map<string, NodeJS.Timeout>;
   }
@@ -55,12 +69,20 @@ if (keys.some((key) => !(key in process.env))) {
         if (ctx instanceof PingContext) return;
         if (!ctx.interaction.guild_id) return;
 
+        let player;
         let game;
 
         try {
           game = await Guild.findOne({ id: ctx.interaction.guild_id });
 
           if (game) await game.populate("contributors");
+
+          player = await Player.findOne({ id: ctx.user.id });
+
+          if (!player) {
+            player = new Player({ id: ctx.user.id });
+            await player.save();
+          }
         } catch (err) {
           console.error(err);
 
@@ -73,14 +95,28 @@ if (keys.some((key) => !(key in process.env))) {
           return true;
         }
 
+        ctx.decorate("player", player);
         ctx.decorate("game", game);
+
         ctx.decorate("timeouts", timeouts);
       }
     }
   });
 
   await app.commands.register(
-    [new Ping(), new Plant(), new Tree(), new Leaderboard(), new Forest(), new Profile(), new About()],
+    [
+      new Ping(),
+      new Plant(),
+      new Tree(),
+      new Leaderboard(),
+      new Forest(),
+      new Profile(),
+      new UserContextProfile(),
+      new About(),
+      new Rename(),
+      new Config(),
+      new Help()
+    ],
     false
   );
 
@@ -138,27 +174,7 @@ if (keys.some((key) => !(key in process.env))) {
       const address = "0.0.0.0";
       const port = process.env.PORT as string;
 
-      const trees = await Guild.find({});
-
-      for (const tree of trees) {
-        if (tree.pieces.length !== 0) {
-          tree.size = tree.pieces.length;
-          await tree.save();
-
-          continue;
-        }
-
-        if (!tree.size) {
-          console.error("bad tree", tree);
-          continue;
-        }
-
-        for (let i = 0; i < tree.size; i++) {
-          tree.pieces.push(0);
-        }
-
-        await tree.save();
-      }
+      await updateGuilds();
 
       server.listen(port, address);
       console.log(`Listening for interactions on ${address}:${port}.`);
@@ -167,3 +183,14 @@ if (keys.some((key) => !(key in process.env))) {
       console.error(err);
     });
 })();
+
+async function updateGuilds() {
+  const trees = await Guild.find({});
+
+  for (const tree of trees) {
+    if (tree.size >= 6) tree.background = "Sky";
+    if (tree.size >= 750) tree.background = "SpaceEdge";
+
+    await tree.save();
+  }
+}

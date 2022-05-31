@@ -8,6 +8,9 @@ interface ITree {
   size: number;
   pieces: number[];
 
+  background: string;
+  backgroundStyle: string;
+
   lastWateredBy: string;
   lastWateredAt: number;
 
@@ -29,7 +32,10 @@ const GuildSchema = new Schema<ITree>({
 
   name: { type: String, required: true },
 
-  size: { type: Number, required: true, default: 1 },
+  background: { type: String, required: true, default: "Ground" },
+  backgroundStyle: { type: String, required: true, default: "Base" },
+
+  size: { type: Number, required: true },
   pieces: { type: [Number], required: true },
 
   lastWateredBy: { type: String, required: false },

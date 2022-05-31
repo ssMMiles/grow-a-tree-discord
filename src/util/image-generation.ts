@@ -2,19 +2,25 @@ import { HydratedDocument } from "mongoose";
 import fetch from "node-fetch";
 import { ITree } from "../models/Guild";
 
-const IMAGE_SERVER = "http://image-server:9090/";
-const SHOW_LAST_X_BLOCKS = 5;
+const IMAGE_SERVER = "http://image-server:9090/tree/";
+export const SHOW_LAST_X_BLOCKS = 5;
 
-export async function renderTree(tree: HydratedDocument<ITree>, full = false): Promise<string> {
-  return full
-    ? fetchImage("fullTree", {
-        id: tree.id,
-        pieces: tree.pieces
-      })
-    : fetchImage("treetop", {
-        id: tree.id,
-        pieces: tree.pieces.slice(-SHOW_LAST_X_BLOCKS)
-      });
+export async function renderTree(tree: HydratedDocument<ITree>): Promise<string> {
+  if (tree.lastWateredAt > Math.floor(Date.now() / 1000)) tree.pieces.pop();
+
+  const background = tree.background ?? "Ground";
+
+  const id = tree.id;
+  const pieces = tree.pieces.slice(-SHOW_LAST_X_BLOCKS).reverse();
+
+  if (background === "Ground") pieces[pieces.length - 1] = 7;
+
+  return fetchImage("", {
+    id,
+
+    background,
+    pieces
+  });
 }
 
 async function fetchImage(path: string, data: unknown): Promise<string> {
@@ -35,7 +41,7 @@ async function fetchImage(path: string, data: unknown): Promise<string> {
 
     const image = await result.json();
 
-    return image.url;
+    return `${image.url}`;
   } catch (err) {
     console.error(err);
 

@@ -149,6 +149,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.12.tgz#0d4557fd3b94497d793efd4e7d92df2f83b4ef24"
   integrity sha512-q4jlIR71hUpWTnGhXWcakgkZeHa3CCjcQcnuzU8M891BAWA2jHiziiWEPEkdS5pFsz7H9HJiy8BrK7tBRNrY7A==
 
+"@types/uuid@^8.3.4":
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.4.tgz#bd86a43617df0594787d38b735f55c805becf1bc"
+  integrity sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==
+
 "@types/webidl-conversions@*":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@types/webidl-conversions/-/webidl-conversions-6.1.1.tgz#e33bc8ea812a01f63f90481c666334844b12a09e"
@@ -892,13 +897,13 @@ inherits@2, inherits@2.0.4:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
-interactions.ts@^1.0.24:
-  version "1.0.24"
-  resolved "https://registry.yarnpkg.com/interactions.ts/-/interactions.ts-1.0.24.tgz#3b32a7b4e2220d30a04cf259cd0f951ae6c052ad"
-  integrity sha512-O+NSqYgxxNRbA/BfbGWF0q7+7YV9j9yLFxXz0T20S2tpUu14tH7B9qQPMAyBULkT+zdc7Rlr5fc0K8OZhw3m9A==
+interactions.ts@^1.0.38:
+  version "1.0.38"
+  resolved "https://registry.yarnpkg.com/interactions.ts/-/interactions.ts-1.0.38.tgz#e9676d7f0964678aee4461216a8ee2fd18580049"
+  integrity sha512-HmYgYlHvDkkAcd6t2EXtC7FeSf5iti4mxMGm3Ug6eyLYjjkbOfKJDI2+HARTs2FTaiTeaQ92XqEwG5j8TMjuxA==
   dependencies:
     "@discordjs/rest" "^0.3.0"
-    tweetnacl "^1.0.3"
+    discord-api-types "^0.32.1"
     uuid "^8.3.2"
 
 ip@^1.1.5:
@@ -1437,11 +1442,6 @@ tsutils@^3.21.0:
   integrity sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==
   dependencies:
     tslib "^1.8.1"
-
-tweetnacl@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
-  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"

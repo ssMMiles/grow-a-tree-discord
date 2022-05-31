@@ -4,14 +4,16 @@ services:
 
   image-server:
     image: gat-image-server:latest
-    ports: 
-      - "9090:9090"
     volumes:
       - /var/www/tiling-images/trees:/var/www/images
     restart: unless-stopped
 
   mongo:
     image: mongo
+    volumes:
+      - /opt/databases/grow-a-tree:/data/db
+    ports: 
+      - "27017:27017"
 
   redis:
     image: redis
@@ -22,3 +24,4 @@ services:
     ports:
       - "8089:8080"
     restart: unless-stopped
+

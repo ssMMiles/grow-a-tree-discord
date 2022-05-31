@@ -16,11 +16,12 @@
   "license": "MIT",
   "dependencies": {
     "@types/humanize-duration": "^3.27.1",
+    "@types/uuid": "^8.3.4",
     "dotenv": "^16.0.0",
     "fastify": "^3.27.4",
     "fastify-raw-body": "^3.2.0",
     "humanize-duration": "^3.27.1",
-    "interactions.ts": "^1.0.24",
+    "interactions.ts": "^1.0.38",
     "mongoose": "^6.3.2",
     "node-fetch": "2",
     "redis": "^4.1.0"
