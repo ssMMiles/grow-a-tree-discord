@@ -28,6 +28,7 @@ import {
   Tree,
   UserContextProfile
 } from "./commands";
+import { Background } from "./commands/Background";
 import { Guild, ITree } from "./models/Guild";
 import { IPlayer, Player } from "./models/Player";
 
@@ -40,7 +41,7 @@ declare module "interactions.ts" {
 }
 
 const timeouts = new Map();
-const keys = ["CLIENT_ID", "TOKEN", "PUBLIC_KEY", "PORT"];
+const keys = ["CLIENT_ID", "TOKEN", "PUBLIC_KEY", "PORT", "MONGO_URI"];
 
 if (keys.some((key) => !(key in process.env))) {
   console.error(`Missing Enviroment Variables`);
@@ -108,6 +109,7 @@ if (keys.some((key) => !(key in process.env))) {
       new Ping(),
       new Plant(),
       new Tree(),
+      new Background(),
       new Leaderboard(),
       new Forest(),
       new Profile(),
@@ -169,7 +171,7 @@ if (keys.some((key) => !(key in process.env))) {
     }
   });
 
-  connect(`mongodb://mongo/trees`)
+  connect(process.env.MONGO_URI as string)
     .then(async () => {
       const address = "0.0.0.0";
       const port = process.env.PORT as string;
@@ -188,9 +190,6 @@ async function updateGuilds() {
   const trees = await Guild.find({});
 
   for (const tree of trees) {
-    if (tree.size >= 6) tree.background = "Sky";
-    if (tree.size >= 750) tree.background = "SpaceEdge";
-
-    await tree.save();
+    // Update trees
   }
 }

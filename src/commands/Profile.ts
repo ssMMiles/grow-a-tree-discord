@@ -85,14 +85,6 @@ async function buildProfileMessage(
 
   const contributor = ctx.game.contributors.find((contributor) => contributor.userId === id);
 
-  let refreshButton;
-  if (ctx instanceof UserCommandContext || ctx instanceof SlashCommandContext) {
-    refreshButton = await ctx.createGlobalComponent("profile.refresh", { id, nick });
-  } else {
-    ctx.parentCommand = undefined;
-    refreshButton = await ctx.createComponent("profile.refresh", { id, nick });
-  }
-
   return new MessageBuilder(
     new EmbedBuilder(
       `${nick}'s Profile`,
@@ -108,5 +100,5 @@ async function buildProfileMessage(
           : "not yet watered the tree."
       }`
     )
-  ).addComponents(new ActionRowBuilder([refreshButton]));
+  ).addComponents(new ActionRowBuilder([await ctx.createGlobalComponent("profile.refresh", { id, nick })]));
 }

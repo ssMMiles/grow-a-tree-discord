@@ -1,4 +1,5 @@
 export * from "./About";
+export * from "./Background";
 export * from "./Config";
 export * from "./Forest";
 export * from "./Help";

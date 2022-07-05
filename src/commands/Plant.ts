@@ -29,8 +29,13 @@ export class Plant implements ISlashCommand {
     .addRequiredPermissions(PermissionBits.ADMINISTRATOR);
 
   public handler = async (ctx: SlashCommandContext): Promise<void> => {
-    if (ctx.game !== null)
-      return ctx.reply(SimpleError(`A tree has already been planted in this server called \`\`${ctx.game.name}\`\`.`));
+    if (ctx.game !== null) {
+      return ctx.reply(
+        SimpleError(
+          `A tree has already been planted in this server called \`\`${ctx.game.name}\`\`. You can only have one per community.`
+        ).setEphemeral(true)
+      );
+    }
 
     const name = ctx.getStringOption("name").value;
 
@@ -38,7 +43,7 @@ export class Plant implements ISlashCommand {
       return ctx.reply(
         SimpleError(
           "Your tree name must be 1-36 characters, and contain only alphanumeric characters, hyphens, and apostrophes."
-        )
+        ).setEphemeral(true)
       );
 
     return ctx.reply(
@@ -63,8 +68,13 @@ export class Plant implements ISlashCommand {
       "confirm",
       new ButtonBuilder().setEmoji({ name: "✔️" }).setStyle(ButtonStyle.Success),
       async (ctx: ButtonContext<State>) => {
-        if (ctx.game !== null)
-          return ctx.reply(`A tree has already been planted in this server called \`\`${ctx.game.name}\`\`.`);
+        if (ctx.game !== null) {
+          return ctx.reply(
+            SimpleError(
+              `A tree has already been planted in this server called \`\`${ctx.game.name}\`\`. You can only have one per community.`
+            ).setEphemeral(true)
+          );
+        }
 
         const name = ctx.state?.name as string;
 
@@ -99,7 +109,7 @@ export class Plant implements ISlashCommand {
       "cancel",
       new ButtonBuilder().setEmoji({ name: "✖️" }).setStyle(ButtonStyle.Danger),
       async (ctx: ButtonContext<State>) => {
-        await ctx.reply(SimpleError("Cancelled.").setComponents([]));
+        await ctx.reply(SimpleError("Tree planting cancelled.").setComponents([]));
       }
     )
   ];

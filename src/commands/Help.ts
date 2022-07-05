@@ -13,7 +13,7 @@ export class Help implements ISlashCommand {
           
           If that's not enough, [click here](https://rocksolidrobots.net/discord) to visit our Discord server where you can get announcements and support for any bots in the RockSolidRobots network.`
         )
-      )
+      ).setEphemeral(true)
     );
   };
 }

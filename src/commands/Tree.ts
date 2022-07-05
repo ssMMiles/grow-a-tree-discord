@@ -34,7 +34,11 @@ export class Tree implements ISlashCommand {
       ctx.timeouts.set(
         ctx.interaction.message.id,
         setTimeout(async () => {
-          await ctx.edit(await buildTreeDisplayMessage(ctx));
+          try {
+            await ctx.edit(await buildTreeDisplayMessage(ctx));
+          } catch (err) {
+            console.error(err);
+          }
         }, (ctx.game.lastWateredAt + growthTime - time) * 1000)
       );
     }
@@ -54,7 +58,11 @@ export class Tree implements ISlashCommand {
           ctx.timeouts.set(
             ctx.interaction.message.id,
             setTimeout(async () => {
-              await ctx.edit(await buildTreeDisplayMessage(ctx));
+              try {
+                await ctx.edit(await buildTreeDisplayMessage(ctx));
+              } catch (err) {
+                console.error(err);
+              }
             }, 3000)
           );
 
@@ -75,7 +83,11 @@ export class Tree implements ISlashCommand {
           ctx.timeouts.set(
             ctx.interaction.message.id,
             setTimeout(async () => {
-              await ctx.edit(await buildTreeDisplayMessage(ctx));
+              try {
+                await ctx.edit(await buildTreeDisplayMessage(ctx));
+              } catch (err) {
+                console.error(err);
+              }
             }, 3000)
           );
 
@@ -186,7 +198,11 @@ export async function buildTreeDisplayMessage(
     ctx.timeouts.set(
       ctx.interaction.message.id,
       setTimeout(async () => {
-        await ctx.edit(await buildTreeDisplayMessage(ctx));
+        try {
+          await ctx.edit(await buildTreeDisplayMessage(ctx));
+        } catch (err) {
+          console.error(err);
+        }
       }, (canBeWateredAt - time) * 1000)
     );
   }

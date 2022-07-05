@@ -31,7 +31,8 @@ export class Leaderboard implements ISlashCommand {
     .setDMEnabled(false);
 
   public handler = async (ctx: SlashCommandContext): Promise<void> => {
-    if (ctx.game === null) return ctx.reply("Use /plant to plant a tree for your server first.");
+    if (ctx.game === null)
+      return ctx.reply(SimpleError("Use /plant to plant a tree for your server first.").setEphemeral(true));
 
     return ctx.reply(await buildLeaderboardMessage(ctx));
   };
@@ -116,10 +117,7 @@ async function buildLeaderboardMessage(
 
   const actionRow = new ActionRowBuilder([await ctx.createComponent("refresh", state)]);
 
-  const toggleGlobal = (await ctx.manager.components.createInstance(
-    "leaderboard.toggleGlobal",
-    state
-  )) as ButtonBuilder;
+  const toggleGlobal = (await ctx.createComponent("toggleGlobal", state)) as ButtonBuilder;
 
   const backButton = await ctx.createComponent("back", state);
   const nextButton = await ctx.createComponent("next", state);
