@@ -11,7 +11,7 @@ export class Help implements ISlashCommand {
           `
           If you're just curious about how the game works, check the /about command for a basic run-down. 
           
-          If that's not enough, [click here](https://rocksolidrobots.net/discord) to visit our Discord server where you can get announcements and support for any bots in the RockSolidRobots network.`
+          If that's not enough, [click here](https://limbolabs.gg/discord) to visit our Discord server where you can get announcements and support for all of our bots.`
         )
       ).setEphemeral(true)
     );
