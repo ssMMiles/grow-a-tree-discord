@@ -17,7 +17,7 @@ export class About implements ISlashCommand {
           
           You can invite it by clicking on its profile, or by clicking the link below. After that, use \`\`/plant\`\` and enjoy!
           
-          [ToS](https://limbolabs.gg/terms-of-service) | [Privacy Policy](https://limbolabs.gg/privacy-policy) | [Discord Support](https://limbolabs.gg/discord) | [Invite The Bot](https://limbolabs.gg/grow-a-tree) | [Vote For Us!](https://top.gg/bot/972637072991068220/vote)`
+          [ToS](https://limbolabs.gg/terms-of-service) | [Privacy Policy](https://limbolabs.gg/privacy-policy) | [Discord Support](https://limbolabs.gg/discord) | [Invite The Bot](https://limbolabs.gg/bots/grow-a-tree/invite) | [Vote For Us!](https://top.gg/bot/972637072991068220/vote)`
         ).setFooter({
           text: `This bot was made by Limbo Labs, find more from us at limbolabs.gg`
         })
